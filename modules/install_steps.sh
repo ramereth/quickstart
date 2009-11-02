@@ -178,12 +178,12 @@ prepare_chroot() {
 install_portage_tree() {
   debug install_portage_tree "tree_type is ${tree_type}"
   if [ "${tree_type}" = "sync" ]; then
-    spawn_chroot "emerge --sync" || die "could not sync portage tree"
+    spawn_chroot "emerge --quiet --sync" || die "could not sync portage tree"
   elif [ "${tree_type}" = "snapshot" ]; then
     fetch "${portage_snapshot_uri}" "${chroot_dir}/$(get_filename_from_uri ${portage_snapshot_uri})" || die "could not fetch portage snapshot"
     spawn "tar -C ${chroot_dir}/usr -xjf ${chroot_dir}/$(get_filename_from_uri ${portage_snapshot_uri})" || die "could not unpack portage snapshot"
   elif [ "${tree_type}" = "webrsync" ]; then
-    spawn_chroot "emerge-webrsync" || die "could not emerge-webrsync"
+    spawn_chroot "emerge-webrsync --quiet" || die "could not emerge-webrsync"
   elif [ "${tree_type}" = "none" ]; then
     warn "'none' specified...skipping"
   else
